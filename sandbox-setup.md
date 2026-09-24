@@ -174,6 +174,32 @@ fi
  
 ### Ⅳ Рвзбор логической связи с `firewalld`
 
+```bash
+if systemctl is-active --quiet firewalld; then
+    log "Opening NFS ports in firewalld"
+    firewall-cmd --permanent --add-service=nfs
+    firewall-cmd --permanent --add-service=mountd
+    firewall-cmd --permanent --add-service=rpc-bind
+    firewall-cmd --reload
+fi
+```
+* **firewalld** - служба-обертка над сетевым фильтром **Linux**, которая управляет тем, какие порты открыть. `firewall-cmd` - ее команда управления.
+> [!TIP]
+> ***Смысл всего блока:*** если на системе вклшючен `firewalld` - открой в нем порты нужные NFS; если `firewalld` нет или выключен - ничего нее трогай.
+
+* `systemctl is active --quiet firewalld` - проверяет, ***запущен ли*** сервис *firewqalld*.
+* `--quiet` = не печатает статус, возвращает только код возврата (0 -активен, иначе - нет).
+
+> [!IMPORTANT]
+>  **Выполняется только если `firewalld` активен:**
+>     * `firewalld-cmd --permanent --add-service=`(`nfs`;`mount`;`rpc-bind`) - открывает 3 слубжбы. `--permanent` - записывает правило в конфиг, чтобы оно пережило перезагрузку и reload.
+
+* Почему именно 3 службы? - потому что **NFSv3 требует трех компонентов** сразу:
+    * `nfs` - сам протокол передачи данных;
+    * `mountd` - [daemon](# "это фоновый процесс в Linux/Unix, который постоянно работает и обслуживает запросы, не привязанный к терминалу пользователя") монтирование, обрабатывает запрос клиента *"дай смантирую эту общую ситевую папку"* 
+
+
+
 
 
 ### Ⅴ
