@@ -11,3 +11,7 @@ Unable/Disable NFS-service:
 systemctl start nfs-lock
 systemctl enable nfs-lock
 ```
+Install NFS
+```bash
+sudo dnf install nfs-utils
+```
