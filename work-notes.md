@@ -15,3 +15,7 @@ Install NFS
 ```bash
 sudo dnf install nfs-utils
 ```
+NFS Status
+```bash
+service nfs status
+```
