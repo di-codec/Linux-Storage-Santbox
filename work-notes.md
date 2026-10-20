@@ -6,7 +6,8 @@ View the status of the services with the command:
 ```bash
 systemctl status rpcbind
 ```
-If the `nfs-utils` package is installed:
+Unable/Disable NFS-service:
 ```bash
-sudo dnf uninstall nfs-utils
+systemctl start nfs-lock
+systemctl enable nfs-lock
 ```
