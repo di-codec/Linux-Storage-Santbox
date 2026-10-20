@@ -22,3 +22,17 @@
 > `sandbox-teardown.sh` **разбирает тот же стенд сверху вниз** - снимает NFS-экспорт, размонтирует том, удаляет LVM и отвязывает диски - возвращая систему в чистое исходное состояние.
 > 
 > Вместе они дают **воспроизводимый цикл**: собрал → потренировался → разобрал → собрал заново, без накопления мусора.
+
+
+```bash
+sudo rm -f /srv/nfs/share/hello.txt
+sudo ~/sandbox-teardown.sh && sudo ~/sandbox-setup.sh
+```
+
+```bash
+df -hT | grep -E 'labvol|nfs-test'
+```
+
+```bash
+~/generate-messy-data.sh
+```
