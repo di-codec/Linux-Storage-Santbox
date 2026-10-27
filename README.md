@@ -1,38 +1,33 @@
 # Linux-Storage-Santbox
 
-*сюда вставить эконку linux-storage-sandbox*
+A small lab project for building and managing a Linux storage sandbox with loop devices, LVM, XFS, and NFS.
 
-установки oracle vmbox https://www.oracle.com/uk/virtualization/technologies/vm/downloads/virtualbox-downloads.html?source=:ow:o:p:nav:mmddyyVirtualBoxHero_uk&intcmp=:ow:o:p:nav:mmddyyVirtualBoxHero_uk
-установка rocky linux 9 вместо 10 (minimal iso) https://rockylinux.org/download
-* объясниить почему 9 а не 10
+## What this repo contains
 
-Что сделали: подняли Rocky Linux 9 в VirtualBox (пробились через историю с x86-64-v3, пересев с 10 на 9), настроили SSH-доступ с Windows — теперь можно копипастить код в VM и копировать вывод обратно.
+- `scripts/` — setup, teardown, checks, and data generation
+- `docs/` — explanations, notes, and troubleshooting
+- `powershell/` — Windows automation for VM snapshots
+- `assets/` — diagrams and screenshots
 
-## Далее по плану:
-- [x] (1) развернуть песочницу-хранилище: loop-диски → LVM → xfs → NFS. 
-- [x] (2) сгенерировать «грязные» данные с дублями и старыми файлами. 
-- [ ] (3) Python + PostgreSQL утилита аудита.
-- [ ] Позже: алерты и *подключение 5 ТБ диска* ***(ВОЗМОЖНО?)***
+## Quick start
 
+1. Review the setup guide:
+   - `docs/sandbox-setup.md`
+2. Build the sandbox:
+   - `scripts/sandbox-setup.sh`
+3. Generate messy data:
+   - `scripts/generate-messy-data.sh`
+4. Tear down when done:
+   - `scripts/sandbox-teardown.sh`
 
-## Объяснения:
-### формулировка идеи:
-> `sandbox-setup.sh` **собирает учебный стенд хранилища снизу вверх**: делает из файлов виртуальные диски, объединяет их через LVM в один том, форматирует в XFS и публикует эту папку по сети через NFS-сервер.
-> 
-> `sandbox-teardown.sh` **разбирает тот же стенд сверху вниз** - снимает NFS-экспорт, размонтирует том, удаляет LVM и отвязывает диски - возвращая систему в чистое исходное состояние.
-> 
-> Вместе они дают **воспроизводимый цикл**: собрал → потренировался → разобрал → собрал заново, без накопления мусора.
+## Project flow
 
+- Create loop-backed disks
+- Build LVM PV/VG/LV
+- Create XFS filesystem
+- Export via NFS
+- Practice auditing and cleanup
 
-```bash
-sudo rm -f /srv/nfs/share/hello.txt
-sudo ~/sandbox-teardown.sh && sudo ~/sandbox-setup.sh
-```
+## Notes
 
-```bash
-df -hT | grep -E 'labvol|nfs-test'
-```
-
-```bash
-~/generate-messy-data.sh
-```
+This repo was reorganized for clarity while preserving the original lab materials and scripts.
